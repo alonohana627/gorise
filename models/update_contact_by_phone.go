@@ -13,7 +13,6 @@ type UpdateContactByPhone struct {
 	Address     *string `json:"address,omitempty"`
 }
 
-// Custom validation function for Contact struct
 func (c *UpdateContactByPhone) Validate() error {
 	if c.Name != nil && !isValidAlphanumeric(*c.Name) {
 		return errors.New("name must contain only alphanumeric characters")
@@ -31,7 +30,6 @@ func (c *UpdateContactByPhone) Validate() error {
 	return nil
 }
 
-// / UnmarshalJSON method with validation
 func (c *UpdateContactByPhone) UnmarshalJSON(data []byte) error {
 	type Alias UpdateContactByPhone
 	aux := &struct {
