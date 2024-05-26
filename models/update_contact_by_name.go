@@ -6,15 +6,14 @@ import (
 	"log"
 )
 
-type Contact struct {
+type UpdateContactByName struct {
 	Name        string  `json:"name"`
 	LastName    string  `json:"lastName"`
-	PhoneNumber string  `json:"phone_number"`
+	PhoneNumber *string `json:"phone_number,omitempty"`
 	Address     *string `json:"address,omitempty"`
 }
 
-// Custom validation function for Contact struct
-func (c *Contact) Validate() error {
+func (c *UpdateContactByName) Validate() error {
 	if !isValidAlphanumeric(c.Name) {
 		return errors.New("name must contain only alphanumeric characters")
 	}
@@ -25,15 +24,14 @@ func (c *Contact) Validate() error {
 		log.Println(*c.Address)
 		return errors.New("address must contain only alphanumeric characters")
 	}
-	if !isValidPhoneNumber(c.PhoneNumber) {
+	if c.PhoneNumber != nil && !isValidPhoneNumber(*c.PhoneNumber) {
 		return errors.New("phone number must contain only digits and hyphens")
 	}
 	return nil
 }
 
-// / UnmarshalJSON method with validation
-func (c *Contact) UnmarshalJSON(data []byte) error {
-	type Alias Contact
+func (c *UpdateContactByName) UnmarshalJSON(data []byte) error {
+	type Alias UpdateContactByName
 	aux := &struct {
 		*Alias
 	}{
@@ -43,10 +41,4 @@ func (c *Contact) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	return c.Validate()
-}
-
-type SearchContactModel struct {
-	Name        *string `json:"name,omitempty"`
-	LastName    *string `json:"lastName,omitempty"`
-	PhoneNumber *string `json:"phone_number,omitempty"`
 }

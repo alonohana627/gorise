@@ -249,9 +249,7 @@ I run it on each run of the server, but I honestly don't know how to create good
 
 ### Unit Tests
 
-I don't know how to mock properly the DB and how to restructure the code properly to make it testable with Unit Tests. I
-can guess that what I need to do is to wrap the DB as an interface, and then create a mock as an interface that
-implements the various CRUD methods.
+I don't know how to properly mock the server in order to unit-test the logic.
 
 ### CI/CD Pipeline
 
@@ -279,4 +277,3 @@ jobs:
         run: docker-compose build auth
 ```
 
-It is very basic and not sufficient.
