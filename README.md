@@ -191,15 +191,17 @@ Handles searching for contacts in the phonebook based on search criteria. Can ha
 ```
 
 #### Request Body:
+
 ```json
 {
   "phone_number": string(nullable),
   "name": string(nullable),
-  "lastName": string(nullable),
+  "lastName": string(nullable)
 }
 ```
 
 #### Responses:
+
 - 200 OK: Successfully retrieved list of matching contacts.
 - 400 Bad Request: Invalid request body.
 - 405 Method Not Allowed: Request method is not POST.
@@ -209,18 +211,71 @@ Handles searching for contacts in the phonebook based on search criteria. Can ha
 
 ```json
 [
-    {
-        "name": "Alonusz",
-        "lastName": "Ohansus",
-        "phone_number": "052-840-8722",
-        "address": "HaDror 3 Gedera"
-    },
-    {
-        "name": "Eliahu",
-        "lastName": "Anavim",
-        "phone_number": "053-844-8722"
-    }
+  {
+    "name": "Alonusz",
+    "lastName": "Ohansus",
+    "phone_number": "052-840-8722",
+    "address": "HaDror 3 Gedera"
+  },
+  {
+    "name": "Eliahu",
+    "lastName": "Anavim",
+    "phone_number": "053-844-8722"
+  }
 ]
 ```
 
-##
+## Reflections
+
+Overall, the API can be improved in order to be scaled out, and some of these improvements were not added
+
+### Caching Layer
+
+A Caching Layer can reduce the amount of requests to the Postgresql, and therefore improve performance and reduce
+latency. A Cache Layer can be local (hashmap/lists of known entries) or non-local (Redis). I did not add a cache layer
+for 2 reasons:
+
+- If I add a local cache - it should be consistent and thread safe. I don't know how to add a local cache layer that
+  will be consistent and thread safe properly (e.g. not susceptible to deadlocks, still performant, and consistent for
+  real with the information in the DB).
+- If I add a non-local cache (Redis) - the main problem with adding any type of cache is the `search` API, which can
+  take partial names and phone numbers. I wasn't sure how to implement it in the same way of the Postgresql`s query.
+
+### Integration Tests
+
+In all honesty - I do not know how to make integration/system tests. I do have .http file that has all the requests and
+I run it on each run of the server, but I honestly don't know how to create good integration tests.
+
+### Unit Tests
+
+I don't know how to mock properly the DB and how to restructure the code properly to make it testable with Unit Tests. I
+can guess that what I need to do is to wrap the DB as an interface, and then create a mock as an interface that
+implements the various CRUD methods.
+
+### CI/CD Pipeline
+
+I don't know how to create a proper CI/CD. In the past I've created for another repo of mine a basic CI/CD that builds
+the Dockerfile with the following YAML:
+
+```yaml
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Build the Docker image
+        run: docker-compose build auth
+```
+
+It is very basic and not sufficient.
