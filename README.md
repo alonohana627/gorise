@@ -227,7 +227,8 @@ Handles searching for contacts in the phonebook based on search criteria. Can ha
 
 ## Reflections
 
-Overall, the API can be improved in order to be scaled out, and some of these improvements were not added
+Overall, the API can be improved in order to be scaled out, and some of these improvements were not added. I did not add
+them because I don't want to add features and technologies that I will implement and deploy poorly.
 
 ### Caching Layer
 
