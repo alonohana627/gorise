@@ -38,8 +38,7 @@ starting point for pagination to begin from a later position.
   "name": string,
   "lastName": string,
   "phone_number": string,
-  "address": string
-  ?
+  "address": string(nullable)
 }
 ```
 
@@ -69,8 +68,7 @@ curl --location 'localhost:8080/api/v1/create-contact'
   "name": string,
   "lastName": string,
   "phone_number": string,
-  "address": string
-  ?
+  "address": string(nullable)
 }
 ```
 
@@ -105,10 +103,8 @@ Handles the editing of a contact's details based on the name.
 {
   "name": string,
   "last_name": string,
-  "phone_number": string
-  ?,
-  "address": string
-  ?
+  "phone_number": string(nullable),
+  "address": string(nullable)
 }
 ```
 
