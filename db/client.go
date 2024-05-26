@@ -3,14 +3,29 @@ package db
 import (
 	"context"
 	"github.com/jackc/pgx/v5/pgxpool"
+	"gorise/models"
+	"log"
 	"os"
 )
 
-// Global client.
-// Pool for multiple requests at once.
-//If it is not a pgxpool - every action will be blocked and multiple requests to the DB are not possible.
+type DatabaseClient struct {
+	dbClient *pgxpool.Pool
+}
 
-var Client *pgxpool.Pool
+type DatabaseEndpoints interface {
+	InitializeTables() error
+	InsertContact(models.Contact) (*models.Contact, int64, error)
+	GetContactByName(string) (*models.Contact, error)
+	GetContacts(int) ([]*models.Contact, error)
+	GetAllContacts() ([]*models.Contact, error)
+	UpdateContactByName(models.UpdateContactByName) error
+	UpdateContactByPhone(models.UpdateContactByPhone) error
+	DeleteContact(string) (bool, error)
+}
+
+func (c *DatabaseClient) Close() {
+	c.dbClient.Close()
+}
 
 type connString struct {
 	username string
@@ -24,7 +39,7 @@ func composeConnString(c connString) string {
 	return "postgres://" + c.username + ":" + c.password + "@" + c.url + ":" + c.port + "/" + c.dbName
 }
 
-func InitClient() (*pgxpool.Pool, error) {
+func InitClient() (*DatabaseClient, error) {
 	username := os.Getenv("DB_USERNAME")
 	password := os.Getenv("DB_PASSWORD")
 	url := os.Getenv("DB_URL")
@@ -39,8 +54,14 @@ func InitClient() (*pgxpool.Pool, error) {
 	c := connString{username, password, url, port, dbName}
 	connectionString := composeConnString(c)
 
-	var err error
-	Client, err = pgxpool.New(context.Background(), connectionString)
+	dbClient, err := pgxpool.New(context.Background(), connectionString)
+	if err != nil {
+		log.Panic(err)
+	}
 
-	return Client, err
+	client := DatabaseClient{
+		dbClient: dbClient,
+	}
+
+	return &client, err
 }

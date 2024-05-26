@@ -9,14 +9,14 @@ import (
 )
 
 func main() {
-	err := db.InitDB()
+	client, err := db.InitDB()
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	defer db.Client.Close()
+	defer client.Close()
 
-	routes := server.CreateRoutes()
+	routes := server.CreateRoutes(client)
 
 	fmt.Println("Running the server on port 8080")
 	http.ListenAndServe(":8080", routes)

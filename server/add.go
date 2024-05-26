@@ -36,7 +36,7 @@ import (
 //   - 400 Bad Request: Invalid request body.
 //   - 405 Method Not Allowed: Request method is not POST.
 //   - 500 Internal Server Error: Database insertion error.
-func AddContact(w http.ResponseWriter, r *http.Request) {
+func AddContact(w http.ResponseWriter, r *http.Request, client *db.DatabaseClient) {
 	if r.Method != "POST" {
 		errorResponse(w, r, 405, "Method Not Allowed")
 		return
@@ -51,7 +51,7 @@ func AddContact(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	m, rowAffected, err := db.InsertContact(*contactBody)
+	m, rowAffected, err := client.InsertContact(*contactBody)
 	if err != nil {
 		log.Println(err)
 		errorResponse(w, r, 500, "Internal Server Error")

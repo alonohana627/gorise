@@ -36,7 +36,7 @@ import (
 //   - 400 Bad Request: Invalid request body.
 //   - 405 Method Not Allowed: Request method is not POST.
 //   - 500 Internal Server Error: Error searching contacts or marshaling response.
-func SearchContact(w http.ResponseWriter, r *http.Request) {
+func SearchContact(w http.ResponseWriter, r *http.Request, client *db.DatabaseClient) {
 	if r.Method != "POST" {
 		errorResponse(w, r, 405, "Method is not allowed")
 		return
@@ -51,7 +51,7 @@ func SearchContact(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	contacts, err := db.SearchContact(*searchBody)
+	contacts, err := client.SearchContact(*searchBody)
 	if err != nil {
 		log.Println(err)
 		errorResponse(w, r, 500, "Internal Server Error")
