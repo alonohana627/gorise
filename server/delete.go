@@ -33,7 +33,7 @@ import (
 //   - 400 Bad Request: Invalid request body or deletion error.
 //   - 405 Method Not Allowed: Request method is not DELETE.
 //   - 500 Internal Error.
-func DeleteContact(w http.ResponseWriter, r *http.Request) {
+func DeleteContact(w http.ResponseWriter, r *http.Request, client *db.DatabaseClient) {
 	if r.Method != "DELETE" {
 		errorResponse(w, r, 405, "Method Not Allowed")
 		return
@@ -48,7 +48,7 @@ func DeleteContact(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	deleted, err := db.DeleteContact(phoneBody.PhoneNumber)
+	deleted, err := client.DeleteContact(phoneBody.PhoneNumber)
 	if err != nil {
 		log.Println(err)
 		errorResponse(w, r, 500, "Internal Error")

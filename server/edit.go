@@ -34,7 +34,7 @@ import (
 //   - 400 Bad Request: Invalid request body.
 //   - 405 Method Not Allowed: Request method is not PATCH.
 //   - 500 Internal Server Error: Database update error.
-func EditContactByPhone(w http.ResponseWriter, r *http.Request) {
+func EditContactByPhone(w http.ResponseWriter, r *http.Request, client *db.DatabaseClient) {
 	if r.Method != "PATCH" {
 		errorResponse(w, r, 405, "Method Not Allowed")
 		return
@@ -49,7 +49,7 @@ func EditContactByPhone(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = db.UpdateContactByPhone(*updateBody)
+	err = client.UpdateContactByPhone(*updateBody)
 	if err != nil {
 		log.Println(err)
 		errorResponse(w, r, 500, "Internal Server Error")
@@ -87,7 +87,7 @@ func EditContactByPhone(w http.ResponseWriter, r *http.Request) {
 //   - 400 Bad Request: Invalid request body.
 //   - 405 Method Not Allowed: Request method is not PATCH.
 //   - 500 Internal Server Error: Database update error.
-func EditContactByName(w http.ResponseWriter, r *http.Request) {
+func EditContactByName(w http.ResponseWriter, r *http.Request, client *db.DatabaseClient) {
 	if r.Method != "PATCH" {
 		errorResponse(w, r, 405, "Method Not Allowed")
 		return
@@ -102,7 +102,7 @@ func EditContactByName(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = db.UpdateContactByName(*updateBody)
+	err = client.UpdateContactByName(*updateBody)
 	if err != nil {
 		log.Println(err)
 		errorResponse(w, r, 500, "Internal Server Error")

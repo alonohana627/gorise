@@ -1,16 +1,18 @@
 package db
 
-import "log"
+import (
+	"log"
+)
 
-func InitDB() error {
-	_, err := InitClient()
+func InitDB() (*DatabaseClient, error) {
+	c, err := InitClient()
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	err = InitializeTables()
+	err = c.InitializeTables()
 	if err != nil {
 		log.Fatal(err)
 	}
-	return err
+	return c, err
 }

@@ -7,7 +7,7 @@ import (
 	"log"
 )
 
-func SearchContact(searchModel models.SearchContactModel) ([]*models.Contact, error) {
+func (c *DatabaseClient) SearchContact(searchModel models.SearchContactModel) ([]*models.Contact, error) {
 	var firstName string
 	var lastNameQuery string
 	var phone string
@@ -29,7 +29,7 @@ func SearchContact(searchModel models.SearchContactModel) ([]*models.Contact, er
 		phone = "%" + *searchModel.PhoneNumber + "%"
 	}
 
-	rows, err := Client.Query(context.Background(), SearchContactByNameQuery, searchName, phone)
+	rows, err := c.dbClient.Query(context.Background(), SearchContactByNameQuery, searchName, phone)
 	if err != nil {
 		log.Println(err)
 		return contactList, err

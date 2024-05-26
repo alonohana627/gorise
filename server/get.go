@@ -46,7 +46,7 @@ func getOffset(offset string) int {
 //   - 200 OK: Successfully retrieved contacts list.
 //   - 405 Method Not Allowed: Request method is not GET.
 //   - 500 Internal Server Error: Error fetching contacts or marshaling response.
-func GetContacts(w http.ResponseWriter, r *http.Request) {
+func GetContacts(w http.ResponseWriter, r *http.Request, client *db.DatabaseClient) {
 	if r.Method != "GET" {
 		errorResponse(w, r, 405, "Method is not allowed")
 		return
@@ -54,7 +54,7 @@ func GetContacts(w http.ResponseWriter, r *http.Request) {
 
 	offsetNum := getOffset(r.URL.Query().Get("offset"))
 
-	contacts, err := db.GetContacts(offsetNum)
+	contacts, err := client.GetContacts(offsetNum)
 	if err != nil {
 		log.Println(err)
 		errorResponse(w, r, 500, "Internal Error")
