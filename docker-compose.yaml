@@ -1,0 +1,29 @@
+version: '3.7'
+
+services:
+  postgres_container:
+    image: postgres:15-alpine
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_USER=root
+      - POSTGRES_DB=phonebook
+
+  phonebook:
+    build: .
+    restart: always
+    depends_on: [ postgres_container ]
+    environment:
+      - DB_USERNAME=root
+      - DB_PASSWORD=root
+      - DB_URL=postgres_container
+      - DB_PORT=5432
+      - DB_NAME=phonebook
+    ports:
+      - '8080:8080'
+
+volumes:
+  postgres_data:

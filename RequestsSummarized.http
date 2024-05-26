@@ -1,0 +1,64 @@
+POST localhost:8080/api/v1/create-contact
+Content-Type: application/json
+
+{
+  "name": "Alonusz",
+  "lastName": "Ohansus",
+  "phone_number": "052-840-8722",
+  "address": "HaDror 3 Gedera"
+}
+
+###
+POST localhost:8080/api/v1/create-contact
+Content-Type: application/json
+
+{
+  "name": "Eliahu",
+  "lastName": "Anavim",
+  "phone_number": "053-844-8722"
+}
+
+###
+
+GET localhost:8080/api/v1/read-contacts
+
+###
+PATCH localhost:8080/api/v1/update-contact-by-name
+Content-Type: application/json
+
+{
+  "name": "Alonusz",
+  "lastName": "Ohansus",
+  "phone_number": "052-840-8723"
+}
+
+###
+PATCH localhost:8080/api/v1/update-contact-by-phone
+Content-Type: application/json
+
+{
+  "name": "Alon",
+  "lastName": "Ohana",
+  "phone_number": "052-840-8723"
+}
+
+###
+GET localhost:8080/api/v1/read-contacts
+
+###
+DELETE localhost:8080/api/v1/delete-contact
+Content-Type: application/json
+
+{
+  "phone_number": "052-840-8723"
+}
+
+###
+POST localhost:8080/api/v1/search-contacts
+Content-Type: application/json
+
+{
+  "phone_number": "053-"
+}
+###
+
